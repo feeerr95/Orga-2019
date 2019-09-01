@@ -10,6 +10,7 @@ struct matrix{
 
 
 matrix_t* create_matrix(size_t rows, size_t cols){
+	if(rows != cols) return NULL;
 	matrix_t* matrix = malloc(sizeof(matrix_t));
 	if(!matrix) return NULL;
 	matrix->rows = rows;
@@ -22,6 +23,7 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 }
 
 void complete_matrix(double* values, matrix_t* m){
+	if(!m) return NULL;
 	for(int y = 0; y < m->rows; y++){
 		for(int x = 0; x < m->cols; x++){
 			m->array[y][x] = values[m->rows * y + x];
@@ -34,6 +36,7 @@ void complete_matrix(double* values, matrix_t* m){
 
 // Revisar esto con valgrind, puede fallar, tal vez haya que iterar por cada array[x][y]
 void destroy_matrix(matrix_t* m){
+	if(!m) return NULL;
 	for(int x = 0; x < m->cols; x++){
 		free(m->array[x]);
 	}
@@ -44,6 +47,7 @@ void destroy_matrix(matrix_t* m){
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
 // por el enunciado
 int print_matrix(FILE* fp, matrix_t* m){
+	if(!m) return -1;
 	if(!fp){
 		perror("Error al crear el archivo de salida");
 		return -1;
