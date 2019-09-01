@@ -31,8 +31,13 @@ void complete_matrix(double* values, matrix_t* m){
 
 
 // Destructor de matrix_t
+
+// Revisar esto con valgrind, puede fallar, tal vez haya que iterar por cada array[x][y]
 void destroy_matrix(matrix_t* m){
-	
+	for(int x = 0; x < m->cols; x++){
+		free(m->array[x]);
+	}
+	free(m);
 }
 
 
@@ -62,14 +67,17 @@ int print_matrix(FILE* fp, matrix_t* m){
 // Multiplica las matrices en m1 y m2
 matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	if(m1->rows != m1->cols || m2->rows != m2->cols || m1->rows != m2->rows) return NULL;
-	 matrix_t* mresult = create_matrix(m1->rows, m1->cols);
-	 if(!mresult) return NULL;
-	 int N = m1->cols;
-	 for(int x = 0; x < N; x++){
-	 	for(int y = 0; y < N; y++){
-	 		
+	matrix_t* mresult = create_matrix(m1->rows, m1->cols);
+	if(!mresult) return NULL;
+	int N = m1->cols;
+	for(int i = 0; i < N; i++){
+	 	for(int x = 0; x < N; x++){
+	 		mresult->array[i][x] = 0;
+	 		for(int y = 0; y < N; y++){
+	 			mresult->array[i][x] += m1->array[i][y] * m2->[x][y]; 
+	 		}
 	 	}
-	 }
-
+	}
+	return mresult;
 }
 
