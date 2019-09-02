@@ -6,7 +6,7 @@
 struct matrix{
 	size_t rows;
 	size_t cols;
-	double* array;
+	double** array;
 };
 
 
@@ -16,15 +16,14 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 	if(!matrix) return NULL;
 	matrix->rows = rows;
 	matrix->cols = cols;
-	matrix->array = malloc(sizeof(double) * rows);
+	matrix->array = malloc(sizeof(double[cols]) * rows);
 	for(int x = 0; x < rows; x++){
-        	array[x] = calloc(cols, sizeof(double));
-    	}
+        	matrix->array[x] = calloc(cols, sizeof(double));
+	}
 	return matrix;
 }
 
 void complete_matrix(double* values, matrix_t* m){
-	if(!m) return NULL;
 	for(int y = 0; y < m->rows; y++){
 		for(int x = 0; x < m->cols; x++){
 			m->array[y][x] = values[m->rows * y + x];
@@ -37,10 +36,10 @@ void complete_matrix(double* values, matrix_t* m){
 
 // Revisar esto con valgrind, puede fallar, tal vez haya que iterar por cada array[x][y]
 void destroy_matrix(matrix_t* m){
-	if(!m) return NULL;
 	for(int x = 0; x < m->cols; x++){
 		free(m->array[x]);
 	}
+	free(m->array);
 	free(m);
 }
 
@@ -55,7 +54,7 @@ int print_matrix(FILE* fp, matrix_t* m){
 	}
 	else{
 		for(int y = 0; y < m->rows; y++){
-			fputc('|')
+			fputc('|', fp);
 			for(int x = 0; x < m->cols; x++){
 				fputc(m->array[y][x], fp);
 				fputc(' ', fp);
@@ -79,7 +78,7 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	 	for(int x = 0; x < N; x++){
 	 		mresult->array[i][x] = 0;
 	 		for(int y = 0; y < N; y++){
-	 			mresult->array[i][x] += m1->array[i][y] * m2->[x][y]; 
+	 			mresult->array[i][x] += m1->array[i][y] * m2->array[x][y]; 
 	 		}
 	 	}
 	}
@@ -123,6 +122,10 @@ int main(int argc, const char* argv[])
 		matrix_t* matrix_B = create_matrix(size, size);
 		complete_matrix(values_A, matrix_A);
 		complete_matrix(values_B, matrix_B);
+		matrix_t* matrix_C = matrix_multiply(matrix_A, matrix_B);
+		FILE *file;
+		file = fopen("out.txt", "w");
+		print_matrix(file, matrix_C);
 	}
 	return(0);
 }
