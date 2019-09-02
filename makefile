@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS  = -Wall -pedantic -g
 
 # the build target executable:
-TARGET = matrix
+TARGET = main
 
 all: $(TARGET) run
 
