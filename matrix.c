@@ -13,17 +13,34 @@ struct matrix{
 matrix_t* create_matrix(size_t rows, size_t cols){
 	if(rows != cols) return NULL;
 	matrix_t* matrix = malloc(sizeof(matrix_t));
-	if(!matrix) return NULL;
+	if(!matrix) {
+		fprintf(stderr, "MEMORY ERROR");
+		return NULL;
+	}
 	matrix->rows = rows;
 	matrix->cols = cols;
 	matrix->array = malloc(sizeof(double[cols]) * rows);
+	if(!matrix->array) {
+		free(matrix);
+		fprintf(stderr, "MEMORY ERROR");
+		return NULL;
+	}
 	for(int x = 0; x < rows; x++){
         	matrix->array[x] = calloc(cols, sizeof(double));
+        	if(!matrix) {
+				destroy_matrix(matrix);
+				fprintf(stderr, "MEMORY ERROR");
+				return NULL;
+			}
 	}
 	return matrix;
 }
 
 void complete_matrix(double* values, matrix_t* m){
+	if(!m) {
+		fprintf(stderr, "NO MATRIX CREATED ERROR");
+		return;
+	}
 	for(int y = 0; y < m->rows; y++){
 		for(int x = 0; x < m->cols; x++){
 			m->array[y][x] = values[m->rows * y + x];
@@ -36,6 +53,10 @@ void complete_matrix(double* values, matrix_t* m){
 
 // Revisar esto con valgrind, puede fallar, tal vez haya que iterar por cada array[x][y]
 void destroy_matrix(matrix_t* m){
+	if(!m) {
+		fprintf(stderr, "NO MATRIX CREATED ERROR");
+		return;
+	}
 	for(int x = 0; x < m->cols; x++){
 		free(m->array[x]);
 	}
@@ -47,10 +68,13 @@ void destroy_matrix(matrix_t* m){
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
 // por el enunciado
 int print_matrix(FILE* fp, matrix_t* m){
-	if(!m) return -1;
+	if(!m) {
+		fprintf(stderr, "NO MATRIX CREATED ERROR");
+		return (-1);
+	}
 	if(!fp){
 		perror("Error al crear el archivo de salida");
-		return -1;
+		return (-1);
 	}
 	else{
 		for(int y = 0; y < m->rows; y++){
@@ -70,9 +94,15 @@ int print_matrix(FILE* fp, matrix_t* m){
 
 // Multiplica las matrices en m1 y m2
 matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
-	if(m1->rows != m1->cols || m2->rows != m2->cols || m1->rows != m2->rows) return NULL;
+	if(m1->rows != m1->cols || m2->rows != m2->cols || m1->rows != m2->rows) {
+		fprintf(stderr, "DIMENSION ERROR");
+		return NULL;
+		}
 	matrix_t* mresult = create_matrix(m1->rows, m1->cols);
-	if(!mresult) return NULL;
+	if(!mresult) {
+		fprintf(stderr, "NO MATRIX CREATED ERROR");
+		return NULL;
+	}
 	int N = m1->cols;
 	for(int i = 0; i < N; i++){
 	 	for(int x = 0; x < N; x++){
