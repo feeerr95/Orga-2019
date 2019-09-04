@@ -5,7 +5,6 @@
 
 int main(int argc, const char* argv[])
 {
-	char buffer[2048];
 	int size;
 	char* string;
 	double value;
