@@ -6,7 +6,7 @@
 struct matrix{
 	size_t rows;
 	size_t cols;
-	double** array;
+	double* array;
 };
 
 
@@ -19,49 +19,53 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 	}
 	matrix->rows = rows;
 	matrix->cols = cols;
-	matrix->array = malloc(sizeof(double[cols]) * rows);
+	matrix->array = (double*)calloc(cols*rows,sizeof(double));
 	if(!matrix->array) {
 		free(matrix);
 		fprintf(stderr, "MEMORY ERROR");
 		return NULL;
 	}
-	for(int x = 0; x < rows; x++){
-        	matrix->array[x] = calloc(cols, sizeof(double));
-        	if(!matrix) { //Otra vez chequear que exista la matriz???
-				destroy_matrix(matrix);
-				fprintf(stderr, "MEMORY ERROR");
-				return NULL;
-			}
-	}
 	return matrix;
 }
 
-void complete_matrix(double* values, matrix_t* m){
+// Permite guardar un valor (double) en la posicion x,y de la matriz m
+ int index_value(matrix_t* m, int x, int y, double value){
+	if(m->rows == 0 || m->cols == 0) return -1;
+	m->array[y*m->rows + x] = value;
+	return 0;
+}
+
+// Permite obtener el valor(double) en la posicion x,y de la matriz m
+double value_obtain(matrix_t* m, int x, int y){
+	return m->array[y*m->rows + x];
+}
+
+int complete_matrix(double* values, matrix_t* m){
 	if(!m) {
 		fprintf(stderr, "NO MATRIX CREATED ERROR");
-		return;
+		return -1;
 	}
 	for(int y = 0; y < m->rows; y++){
 		for(int x = 0; x < m->cols; x++){
-			m->array[y][x] = values[m->rows * y + x];
+			double value = values[m->rows * y + x];
+			index_value(m,x,y, value);
 		}
 	}
+	return
 }
 
 
 // Destructor de matrix_t
 
 // Revisar esto con valgrind, puede fallar, tal vez haya que iterar por cada array[x][y]
-void destroy_matrix(matrix_t* m){
+int destroy_matrix(matrix_t* m){
 	if(!m) {
 		fprintf(stderr, "NO MATRIX CREATED ERROR");
-		return;
-	}
-	for(int x = 0; x < m->cols; x++){
-		free(m->array[x]);
+		return -1;
 	}
 	free(m->array);
 	free(m);
+	return 0;
 }
 
 
@@ -80,7 +84,7 @@ int print_matrix(FILE* fp, matrix_t* m){
 		for(int y = 0; y < m->rows; y++){
 			fputc('|', fp);
 			for(int x = 0; x < m->cols; x++){
-				fputc(m->array[y][x], fp);
+				fputc(value_obtain(m, x, y), fp);
 				fputc(' ', fp);
 			}
 			fputc('|', fp);
@@ -106,9 +110,11 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	int N = m1->cols;
 	for(int i = 0; i < N; i++){
 	 	for(int x = 0; x < N; x++){
-	 		mresult->array[i][x] = 0;
+	 		index_value(mresult,x,i, 0);
 	 		for(int y = 0; y < N; y++){
-	 			mresult->array[i][x] += m1->array[i][y] * m2->array[x][y]; 
+	 			double value = value_obtain(mresult,x,i);
+	 			value += value_obtain(m1,y, i) * value_obtain(m2,x,y);
+	 			index_value(mresult,x,i,value);
 	 		}
 	 	}
 	}
