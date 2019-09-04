@@ -3,6 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 
+
+double string_to_float(char* string){
+	double number = atof(string);
+	return number;
+}
+
+
 int main(int argc, const char* argv[])
 {
 	char buffer[2048];

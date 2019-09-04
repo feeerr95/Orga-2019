@@ -51,7 +51,7 @@ int complete_matrix(double* values, matrix_t* m){
 			index_value(m,x,y, value);
 		}
 	}
-	return
+	return 0;
 }
 
 
@@ -121,8 +121,5 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	return mresult;
 }
 
-double string_to_float(char* string){
-	double number = atof(string);
-	return number;
-}
+
 
