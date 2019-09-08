@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "matrix.c"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -34,6 +34,7 @@ int main(int argc, const char* argv[])
 			}
 			values[i] = value;
 		}
+
 		double* values_A = (double*) malloc(size*size*sizeof(double));
 		memcpy(values_A, values, size*size*sizeof(double));
 		double* values_B = (double*) malloc(size*size*sizeof(double));
@@ -44,7 +45,7 @@ int main(int argc, const char* argv[])
 		complete_matrix(values_B, matrix_B);
 		matrix_t* matrix_C = matrix_multiply(matrix_A, matrix_B);
 		FILE *file;
-		file = fopen("out.txt", "w");
+		file = fopen("out.txt", "a");
 		print_matrix(file, matrix_C);
 		free(values);
 		free(values_A);

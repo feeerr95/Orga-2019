@@ -81,9 +81,13 @@ int print_matrix(FILE* fp, matrix_t* m){
 		return (-1);
 	}
 	else{
+		fprintf(fp, "%s\n", "Resultado de la multiplicacion:" );
 		for(int y = 0; y < m->rows; y++){
+			fputc('|', fp);
+			fputc(' ', fp);
 			for(int x = 0; x < m->cols; x++){
-				fprintf(fp, "%lg", value_obtain(m, x, y));
+				double value = value_obtain(m, x, y);
+				fprintf(fp, "%g", value );
 				fputc(' ', fp);
 			}
 		}
