@@ -10,7 +10,9 @@ int main(int argc, const char* argv[])
 	char buffer[4096];
 	char* delim = " ";
 	int ok;
+	
 	while(fgets(buffer, sizeof(buffer), stdin)){
+
 		ok = sscanf(buffer, "%i", &size);
 		if(!ok){
 			fprintf(stderr, "ERROR EN LECTURA: No se recibio un tamaño correcto de matriz\n");

@@ -9,7 +9,6 @@ struct matrix{
 	double* array;
 };
 
-
 matrix_t* create_matrix(size_t rows, size_t cols){
 	if(rows != cols) return NULL;
 	matrix_t* matrix = malloc(sizeof(matrix_t));
@@ -28,14 +27,12 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 	return matrix;
 }
 
-// Permite guardar un valor (double) en la posicion x,y de la matriz m
- int index_value(matrix_t* m, int x, int y, double value){
+int index_value(matrix_t* m, int x, int y, double value){
 	if(m->rows == 0 || m->cols == 0) return -1;
 	m->array[y*m->rows + x] = value;
 	return 0;
 }
 
-// Permite obtener el valor(double) en la posicion x,y de la matriz m
 double value_obtain(matrix_t* m, int x, int y){
 	return m->array[y*m->rows + x];
 }
@@ -54,10 +51,6 @@ int complete_matrix(double* values, matrix_t* m){
 	return 0;
 }
 
-
-// Destructor de matrix_t
-
-// Revisar esto con valgrind, puede fallar, tal vez haya que iterar por cada array[x][y]
 int destroy_matrix(matrix_t* m){
 	if(!m) {
 		fprintf(stderr, "NO MATRIX CREATED ERROR");
@@ -68,9 +61,6 @@ int destroy_matrix(matrix_t* m){
 	return 0;
 }
 
-
-// Imprime matrix_t sobre el file pointer fp en el formato solicitado
-// por el enunciado
 int print_matrix(FILE* fp, matrix_t* m){
 	if(!m) {
 		fprintf(stderr, "NO MATRIX CREATED ERROR");
@@ -100,7 +90,6 @@ int print_matrix(FILE* fp, matrix_t* m){
 	return 0;
 }
 
-// Multiplica las matrices en m1 y m2
 matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	if(m1->rows != m1->cols || m2->rows != m2->cols || m1->rows != m2->rows) {
 		fprintf(stderr, "DIMENSION ERROR");

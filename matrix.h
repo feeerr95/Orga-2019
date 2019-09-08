@@ -8,21 +8,22 @@
 struct matrix;
 typedef struct matrix matrix_t;
 
-// Constructor de matrix_t.
+// Constructor de matriz.
 matrix_t* create_matrix(size_t rows, size_t cols);
 
+// Guarda un doule en la coordenada (x,y) dada.
 int index_value(matrix_t* m, int x, int y, double value);
 
+// Obtiene el valor (double) en la coordenada (x,y).
 double value_obtain(matrix_t* m, int x, int y);
-// Completa la matriz con los valores de un array de doubles.
-// El array tiene la misma dimension que cols*rows de la matriz
+
+// Completa la matriz a partir de un array de doubles.
 int complete_matrix(double* values, matrix_t* m);
 
-// Destructor de matrix_t.
+// Destructor de matriz
 int destroy_matrix(matrix_t* m);
 
-// Imprime matrix_t sobre el file pointer fp en el formato solicitado.
-// por el enunciado
+// Imprime matriz sobre el file pointer fp.
 int print_matrix(FILE* fp, matrix_t* m);
 
 // Multiplica las matrices en m1 y m2.
