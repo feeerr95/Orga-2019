@@ -1,2 +1,8 @@
-|  |
-|+ 2 |
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 7 10 | 15 22 
