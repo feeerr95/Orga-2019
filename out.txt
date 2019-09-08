@@ -40,3 +40,67 @@ Resultado de la multiplicacion:
 
 Resultado de la multiplicacion:
 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 6 
+Resultado de la multiplicacion:
+
+Resultado de la multiplicacion:
+| 0 0 | 0 0 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| -2 
+Resultado de la multiplicacion:
+| 2 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 20 20 | 32 32 
+Resultado de la multiplicacion:
+| 6 6 | 8 8 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 0 0 | 0 0 
+Resultado de la multiplicacion:
+
+Resultado de la multiplicacion:
+| 0 0 | 0 0 
+Resultado de la multiplicacion:
+| 0 0 | 0 0 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 26 30 | 38 44 
+Resultado de la multiplicacion:
+| 101 101 | 2 2 
+Resultado de la multiplicacion:
+| 2 2 | 2 2 
+Resultado de la multiplicacion:
+| 1.01 1.01 | 2 2 
+Resultado de la multiplicacion:
+| 19 22 | 43 50 
+Resultado de la multiplicacion:
+| 201 201 | 2 2 
+Resultado de la multiplicacion:
+| 4.4 4.4 | 8 8 

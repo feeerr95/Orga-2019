@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "matrix.c"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,12 +30,15 @@ int main(int argc, const char* argv[])
 				fprintf(stderr, "%s", "ERROR EN LECTURA: Faltan valores\n");
 				return(1);
 			}
-			ok = sscanf(string, "%lg", &value);
-			if (!ok){
+
+			char* error = "";
+			value = strtod(string, &error);
+			if( strcmp("", error) != 0){
 				free(values);
 				fprintf(stderr, "%s", "ERROR EN LECTURA: Valor en formato erroneo\n");
 				return(1);
 			}
+
 			values[i] = value;
 		}
 
@@ -43,20 +46,28 @@ int main(int argc, const char* argv[])
 		memcpy(values_A, values, size*size*sizeof(double));
 		double* values_B = (double*) malloc(size*size*sizeof(double));
 		memcpy(values_B, values+size*size, size*size*sizeof(double));
+
 		matrix_t* matrix_A = create_matrix(size, size);
 		matrix_t* matrix_B = create_matrix(size, size);
+
 		complete_matrix(values_A, matrix_A);
 		complete_matrix(values_B, matrix_B);
+
 		matrix_t* matrix_C = matrix_multiply(matrix_A, matrix_B);
+
 		FILE *file;
 		file = fopen("out.txt", "a");
+
 		print_matrix(file, matrix_C);
+
 		free(values);
 		free(values_A);
 		free(values_B);
+
 		destroy_matrix(matrix_A);
 		destroy_matrix(matrix_B);
 		destroy_matrix(matrix_C);
+
 		fclose(file);
 	}
 	return(0);

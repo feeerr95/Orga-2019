@@ -88,8 +88,8 @@ int print_matrix(FILE* fp, matrix_t* m){
 			fputc(' ', fp);
 			for(int x = 0; x < m->cols; x++){
 				double value = value_obtain(m, x, y);
-				fprintf(stdout, "%g ", value);
-				fprintf(fp, "%g", value );
+				fprintf(stdout, "%lg ", value);
+				fprintf(fp, "%lg", value );
 				fputc(' ', fp);
 			}
 		}
