@@ -12,6 +12,10 @@ int main(int argc, const char* argv[])
 	int ok;
 	while(fgets(buffer, sizeof(buffer), stdin)){
 		ok = sscanf(buffer, "%i", &size);
+		if(!ok){
+			fprintf(stderr, "ERROR EN LECTURA: No se recibio un tamaño correcto de matriz\n");
+			return(1);
+		}
 		int ammount = 2*size*size;
 		double* values = (double*) malloc(ammount*sizeof(double));
 		if(!values) {
