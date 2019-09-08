@@ -82,14 +82,12 @@ int print_matrix(FILE* fp, matrix_t* m){
 	}
 	else{
 		for(int y = 0; y < m->rows; y++){
-			fputc('|', fp);
 			for(int x = 0; x < m->cols; x++){
-				fputc(value_obtain(m, x, y), fp);
+				fprintf(fp, "%lg", value_obtain(m, x, y));
 				fputc(' ', fp);
 			}
-			fputc('|', fp);
-			fputc('\n', fp);
 		}
+		fputc('\n', fp);
 	}
 	fflush(fp);
 	fclose(fp);
@@ -120,6 +118,3 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	}
 	return mresult;
 }
-
-
-

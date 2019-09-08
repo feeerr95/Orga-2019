@@ -7,25 +7,32 @@ int main(int argc, const char* argv[])
 {
 	int size;
 	double value;
-	int rtn;
-	while(fscanf(stdin, "%i", &size) > 0){
-		printf("%d\n", size);
+	char buffer[4096];
+	char* delim = " ";
+	int ok;
+	while(fgets(buffer, sizeof(buffer), stdin)){
+		ok = sscanf(buffer, "%i", &size);
 		int ammount = 2*size*size;
 		double* values = (double*) malloc(ammount*sizeof(double));
 		if(!values) {
-			fprintf(stderr, "MEMORY ERROR");
+			fprintf(stderr, "MEMORY ERROR\n");
 			return (1);
 		}
+		char* string = strtok(buffer, delim);
 		for(int i = 0; i < ammount; i++){
-			rtn = fscanf(stdin, "%lg", &value);
-			if (!rtn){
+			string = strtok(NULL, delim);
+			if(!string){
 				free(values);
-				fprintf(stderr, "%s", "ERROR EN LECTURA");
+				fprintf(stderr, "%s", "ERROR EN LECTURA: Faltan valores\n");
+				return(1);
+			}
+			ok = sscanf(string, "%lg", &value);
+			if (!ok){
+				free(values);
+				fprintf(stderr, "%s", "ERROR EN LECTURA: Valor en formato erroneo\n");
 				return(1);
 			}
 			values[i] = value;
-			printf("%g\n", value);
-			printf("%i\n", rtn);
 		}
 		double* values_A = (double*) malloc(size*size*sizeof(double));
 		memcpy(values_A, values, size*size*sizeof(double));
