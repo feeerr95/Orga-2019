@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "matrix.c"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,7 +9,6 @@ int main(int argc, const char* argv[])
 	double value;
 	int rtn;
 	while(fscanf(stdin, "%i", &size) > 0){
-		printf("%d\n", size);
 		int ammount = 2*size*size;
 		double* values = (double*) malloc(ammount*sizeof(double));
 		if(!values) {
@@ -24,9 +23,8 @@ int main(int argc, const char* argv[])
 				return(1);
 			}
 			values[i] = value;
-			printf("%g\n", value);
-			printf("%i\n", rtn);
 		}
+
 		double* values_A = (double*) malloc(size*size*sizeof(double));
 		memcpy(values_A, values, size*size*sizeof(double));
 		double* values_B = (double*) malloc(size*size*sizeof(double));
@@ -37,7 +35,7 @@ int main(int argc, const char* argv[])
 		complete_matrix(values_B, matrix_B);
 		matrix_t* matrix_C = matrix_multiply(matrix_A, matrix_B);
 		FILE *file;
-		file = fopen("out.txt", "w");
+		file = fopen("out.txt", "a");
 		print_matrix(file, matrix_C);
 		free(values);
 		free(values_A);
