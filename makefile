@@ -4,18 +4,21 @@ CC = gcc
 # compiler flags:
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
-CFLAGS  = -Wall -pedantic -g
+CFLAGS  = -Wall -std=c99 -g
 
 # the build target executable:
 TARGET = main
 
 all: build run
 
-build: main.c matrix.c
-	$(CC) $(CFLAGS) -o $(TARGET) main.c matrix.c
+build: matrix.c main.c
+	$(CC) $(CFLAGS) -o $(TARGET) matrix.c main.c
 
 clean:
 	$(RM) $(TARGET)
 
 run:
 	./$(TARGET)
+
+assembly: matrix.c main.c
+		$(CC) $(CFLAGS) -O0 -S -mrnames matrix.c main.c

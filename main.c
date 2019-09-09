@@ -1,4 +1,4 @@
-#include "matrix.c"
+#include "matrix.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,7 +10,7 @@ int main(int argc, const char* argv[])
 	char buffer[4096];
 	char* delim = " ";
 	int ok;
-	
+
 	while(fgets(buffer, sizeof(buffer), stdin)){
 
 		ok = sscanf(buffer, "%i", &size);
@@ -35,7 +35,7 @@ int main(int argc, const char* argv[])
 
 			char* error = "";
 			value = strtod(string, &error);
-			if( strcmp("", error) != 0){
+			if(strcmp("", error) != 0 && strcmp("\n", error) != 0){
 				free(values);
 				fprintf(stderr, "%s", "ERROR EN LECTURA: Valor en formato erroneo\n");
 				return(1);
