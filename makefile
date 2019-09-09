@@ -14,9 +14,6 @@ all: build run
 build: matrix.c main.c
 	$(CC) $(CFLAGS) -o $(TARGET) matrix.c main.c
 
-clean:
-	$(RM) $(TARGET)
-
 run:
 	./$(TARGET)
 
