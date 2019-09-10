@@ -71,6 +71,7 @@ int print_matrix(FILE* fp, matrix_t* m){
 		return (-1);
 	}
 	else{
+		fprintf(stdout, "%li ", m->rows );
 		fprintf(fp, "%s\n", "Resultado de la multiplicacion:" );
 		for(int y = 0; y < m->rows; y++){
 			fputc('|', fp);
