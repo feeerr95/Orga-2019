@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "matrix.c"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -14,10 +14,11 @@ int main(int argc, const char* argv[])
 	while(fgets(buffer, sizeof(buffer), stdin)){
 
 		ok = sscanf(buffer, "%i", &size);
-		if(!ok){
+		if(!ok || size <= 0){
 			fprintf(stderr, "ERROR EN LECTURA: No se recibio un tamaño correcto de matriz\n");
 			return(1);
 		}
+
 		int ammount = 2*size*size;
 		double* values = (double*) malloc(ammount*sizeof(double));
 		if(!values) {
