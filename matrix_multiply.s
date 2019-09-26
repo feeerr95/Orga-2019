@@ -21,14 +21,8 @@ matrix_multiply:
 	sw		ra, 32(sp)
 	
 	move	$fp, sp # de aqui al fin de la funcion uso $fp en lugar de sp.
-	sw		a0, 40($fp)	# matrix_t* m1: a0, sp+40
-	sw  	a1, 44($fp) # matrix_t* m2: a1, sp+44
-	
-	sw 		t0, 16($fp)
-	sw		t1, 20($fp)
-	sw		t2, 24($fp)
-	sw		t3, 28($fp)
-	sw		t4, 32($fp)
+	sw		a0, 40($fp)	# matrix_t* m1 lo salvo en a0, sp+40
+	sw  	a1, 44($fp) # matrix_t* m2 lo salvo en a1, sp+44
 
 	lw  	t0, 40($fp) #puntero a m1
 	lw  	t1, 0(t0) #t1 = m1->rows
@@ -36,34 +30,38 @@ matrix_multiply:
 	bne 	t1, t2, _dimension_error # m1->rows != m1->cols
  
 	lw  	t2, 44($fp) #puntero a m2
-	lw 	 	t3, 0($fp) #t3 = m2->rows
+	lw 	 	t3, 0(t2) #t3 = m2->rows
 	lw  	t4, 4(t2) #t4 = m2->cols
 	bne		t3, t4, _dimension_error #m2->rows != m2->cols
 	bne		t1, t3, _dimension_error #m1->rows != m2->rows
 	
 	sw		t1, 0($fp)
-	sw		t1, 4($fp)
 	la 		t9, create_matrix
 	jal  	t9
 
-	sw 		s0, 36($fp)
-	sw		s1, 40($fp)
-	sw		t5, 44($fp)
-
-
 	mul 	s0, s0, zero #Limpio s0, por las dudas
-	addu 	s0, s0, v0 #s0 = result (puntero a lo que devuelve create_matrix) (creo)
+	addu 	s0, s0, v0 #s0 = result (puntero a lo que devuelve create_matrix)
+	sw 		s0, 16($fp)
+
 	beqz	s0, _created_matrix_error
 
-	#N = t1
-	mul 	t2, t2, zero #i = 0
+	lw 		t0, 40($fp) #guardo a0 de nuevo en t0
+	lw		t1, 0(t0) #m1->rows = N
+
+	move	t2, zero # i=0: t2
 for_i:
-	mul 	t3, t3, zero #x = 0
+
+	move	t3, zero # x=0: t3
 for_x:
-	#guardar en ABA mresult, x, i, 0
+
+	sw 		t6, 8(s0) #array de mresult
+
+	# aca hay que hacer esto: mresult->array[i*mresult->rows + x] = value;
+
 	la 		t9, index_value
 	jal 	t9
-	mul 	t4, t4, zero # y= 0
+
+	move	t4, zero # y=0: t4
 for_y:
 	#double value = value_obtain(mresult,x,i);
 	#value += value_obtain(m1,y, i) * value_obtain(m2,x,y);
@@ -86,18 +84,54 @@ for_y:
 	
 
 _created_matrix_error:
-	#Aca hay que guardar el "NO MATRIX CREATED ERROR" en algun registro ax para pasarlo a fprintf
-	la 		t9, fprintf #uso del printf
-	jal 	t9
+	li 		a0, 2 #File descriptor del write, modo stderr
+	la 		a1, CREATED_MATRIX_ERROR
+	li 		a2, 23
+	li 		v0, sys_write
+	syscall
 	subu	v0, zero, zero #return NULL
 	jr		ra
 
 
 _dimension_error:
-	#Aca hay que guardar el "DIMENSION ERROR" en algun registro ax para pasarlo a fprintf
-	la 		t9, fprintf #uso del printf
-	jal 	t9
+	li 		a0, 2 #File descriptor del write, modo stderr
+	la 		a1, DIM_ERROR
+	li 		a2, 15
+	li 		v0, sys_write
+	syscall
 	subu	v0, zero, zero #return NULL
 	jr		ra
 
 	.end matrix_multiply #Dudas de donde va esto
+
+DIM_ERROR: .asciiz "DIMENSION ERROR"
+CREATED_MATRIX_ERROR: .asciiz "NO MATRIX CREATED ERROR"
+
+matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
+
+	if(m1->rows != m1->cols || m2->rows != m2->cols || m1->rows != m2->rows) {
+		fprintf(stderr, "DIMENSION ERROR");
+		return NULL;
+		}
+
+	matrix_t* mresult = create_matrix(m1->rows, m1->cols);
+
+	if(!mresult) {
+		fprintf(stderr, "NO MATRIX CREATED ERROR");
+		return NULL;
+	}
+
+	int N = m1->cols;
+	for(int i = 0; i < N; i++){
+	 	for(int x = 0; x < N; x++){
+	        mresult->array[i*mresult->rows + x] = value;
+	 		for(int y = 0; y < N; y++){
+	 			double value = value_obtain(mresult,x,i);
+	 			value += value_obtain(m1,y, i) * value_obtain(m2,x,y);
+	 			index_value(mresult,x,i,value);
+	 		}
+	 	}
+	}
+	return mresult;
+}
+
