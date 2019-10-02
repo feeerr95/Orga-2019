@@ -24,30 +24,30 @@ matrix_multiply:
 	sw		a0, 40($fp)	# matrix_t* m1 lo salvo en a0, sp+40
 	sw  	a1, 44($fp) # matrix_t* m2 lo salvo en a1, sp+44
 
-	lw  	t0, 40($fp) #puntero a m1
-	lw  	t1, 0(t0) #t1 = m1->rows
-	lw  	t2, 4(t0) #t2 = m1->cols
+	lw  	t1, 0(a0) #t1 = m1->rows
+	lw  	t2, 4(a0) #t2 = m1->cols
 	bne 	t1, t2, _dimension_error # m1->rows != m1->cols
  
-	lw  	t2, 44($fp) #puntero a m2
-	lw 	 	t3, 0(t2) #t3 = m2->rows
-	lw  	t4, 4(t2) #t4 = m2->cols
+	lw 	 	t3, 0(a1) #t3 = m2->rows
+	lw  	t4, 4(a1) #t4 = m2->cols
 	bne		t3, t4, _dimension_error #m2->rows != m2->cols
 	bne		t1, t3, _dimension_error #m1->rows != m2->rows
-	
+
+	#------------------------------------------------
 	sw		t1, 0($fp)
 	la 		t9, create_matrix
 	jal  	t9
 
-	mul 	s0, s0, zero #Limpio s0, por las dudas
+	move 	s0, zero #Limpio s0, por las dudas
 	addu 	s0, s0, v0 #s0 = result (puntero a lo que devuelve create_matrix)
 	sw 		s0, 16($fp)
 
 	beqz	s0, _created_matrix_error
+	#------------------------------------------------
 
-	lw 		a0, 40($fp) #cargo a0 (m1)
+	sw 		a0, 40($fp) #cargo a0 (m1)
 	lw		t0, 0(a0) #t1 = m1->rows = N
-	lw 		a1, 44($fp) #cargo a1 (m2)
+	sw 		a1, 44($fp) #cargo a1 (m2)
 
 	move	t2, zero # i=0: t2
 for_i:
@@ -59,7 +59,7 @@ for_x:
 	lw      t7, 0(s0) #t7 = mresult->rows
 	mul 	t7, t7, t2 #t7 = mresult->rows * i
 	addu 	t7, t7, t3 #t7 = mresult->rows * i + x
-	sw 		zero, t6(t7) # mresult->array[t7] = 0
+	sw 		zero, t7(t6) # mresult->array[t7] = 0
 
 	move	t4, zero # y=0: t4
 for_y:
@@ -67,22 +67,22 @@ for_y:
 	lw 		t6, 8(a0) #t6 = m1->array
 	lw      t7, 0(a0) #t7 = m1->rows
 	mul 	t7, t7, t2 #t7 = m1->rows * i
-	addu 	t7, t7, t4 #t7 = m1->rows * i + x
-	l.d 	f0, t6(t7) #creo que en f0 se guarda m1->array[i*m1->rows + y]
+	addu 	t7, t7, t4 #t7 = m1->rows * i + y
+	l.d 	f0, t7(t6) #creo que en f0 se guarda m1->array[i*m1->rows + y]
 
 	lw 		t6, 8(a1) #t6 = m2->array
 	lw      t7, 0(a1) #t7 = m2->rows
 	mul 	t7, t7, t2 #t7 = m2->rows * i
-	addu 	t7, t7, t4 #t7 = m2->rows * i + x
-	l.d 	f1, t6(t7) #creo que en f1 se guarda m2->array[i*m1->rows + y]
+	addu 	t7, t7, t3 #t7 = m2->rows * i + y
+	l.d 	f1, t7(t6) #creo que en f1 se guarda m2->array[i*m1->rows + y]
 
 	mul.s 	f0, f1, f0 # multiplcacion de valores de las matrices
 
 	lw 		t6, 8(s0) #t6 = mresult->array
 	lw      t7, 0(s0) #t7 = mresult->rows
-	mul 	t7, t7, t2 #t7 = mresult->rows * i
-	addu 	t7, t7, t3 #t7 = mresult->rows * i + x
-	s.d		f0, t6(t7) # mresult->array[t7] = 0
+	mul 	t7, t7, t3 #t7 = mresult->rows * x
+	addu 	t7, t7, t4 #t7 = mresult->rows * x + y
+	s.d		f0, t7(t6) # mresult->array[t7] = 0
 	
 	addiu 	t4, t4, 1 # y++
 	sltu	t5, t0, t4 # if t0 < t4 (N < y) t5 = 1 else t5 = 0
