@@ -1,10 +1,9 @@
-#include "matrix.c"
+#include "matrix.h"
 #include "my_matrix_multiply.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-	
 int main(int argc, const char* argv[])
 {
 	int size;
