@@ -45,7 +45,8 @@ int complete_matrix(double* values, matrix_t* m){
 	for(int y = 0; y < m->rows; y++){
 		for(int x = 0; x < m->cols; x++){
 			double value = values[m->rows * y + x];
-			index_value(m,x,y, value);
+			int comp = index_value(m,x,y, value);
+			if(comp == -1) return -1;
 		}
 	}
 	return 0;
