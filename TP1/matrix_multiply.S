@@ -4,10 +4,10 @@
 	.text
 	.abicalls
 	.align 2
-	.globl my_matrix_multiply
-	.ent my_matrix_multiply
+	.globl matrix_multiply
+	.ent matrix_multiply
 
-my_matrix_multiply:
+matrix_multiply:
 
 	.frame $fp, 40, ra
 	.set	noreorder	# apaga reordenamiento de instrucciones
@@ -59,8 +59,10 @@ my_matrix_multiply:
 	lw		t0, 0(a0) #t1 = m1->rows = N
 
 	move	t1, zero #i=0
-for_i: move	t2, zero # x=0: t3
-for_x: lw t4, 8(s0) #t4 = mresult->array
+for_i: 
+	move	t2, zero # x=0: t3
+for_x: 
+	lw 		t4, 8(s0) #t4 = mresult->array
 	lw      t5, 0(s0) #t5 = mresult->rows
 	mul 	t5, t5, t1 #t5 = mresult->rows * i
 	addu 	t5, t5, t2 #t5 = mresult->rows * i + x
@@ -128,6 +130,9 @@ _created_matrix_error:
 	li 		v0, SYS_write
 	syscall
 	li		v0, 0 #return NULL
+	lw		ra, 32(sp)
+	lw		$fp, 28(sp)
+	lw		gp, 24(sp)
 	jr		ra
 
 
@@ -138,6 +143,9 @@ _dimension_error:
 	li 		v0, SYS_write
 	syscall
 	li		v0, 0 #return NULL
+	lw		ra, 32(sp)
+	lw		$fp, 28(sp)
+	lw		gp, 24(sp)
 	jr		ra
 
 
@@ -148,6 +156,9 @@ _malloc_matrix_error:
 	li 		v0, SYS_write
 	syscall
 	li		v0, 0 #return NULL
+	lw		ra, 32(sp)
+	lw		$fp, 28(sp)
+	lw		gp, 24(sp)
 	jr		ra
 
 _malloc_array_error:
@@ -161,11 +172,14 @@ _malloc_array_error:
 	li 		v0, SYS_write
 	syscall
 	li		v0, 0 #return NULL
+	lw		ra, 32(sp)
+	lw		$fp, 28(sp)
+	lw		gp, 24(sp)
 	jr		ra
 
-	.end my_matrix_multiply
+	.end matrix_multiply
 
-	.size	my_matrix_multiply,.-my_matrix_multiply
+	.size	matrix_multiply,.-matrix_multiply
 
 	.rdata
 	.align 2

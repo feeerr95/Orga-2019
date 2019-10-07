@@ -1,5 +1,4 @@
 #include "matrix.h"
-#include "my_matrix_multiply.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -57,7 +56,7 @@ int main(int argc, const char* argv[])
 		complete_matrix(values_A, matrix_A);
 		complete_matrix(values_B, matrix_B);
 
-		matrix_t* matrix_C = my_matrix_multiply(matrix_A, matrix_B);
+		matrix_t* matrix_C = matrix_multiply(matrix_A, matrix_B);
 
 		FILE *file;
 		file = fopen("out.txt", "a");
